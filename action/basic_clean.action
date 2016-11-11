@@ -1,0 +1,12 @@
+#goal definition
+uint16 seconds
+---
+#result definition
+uint16 seconds
+uint32 millimeters
+float32 battery_charge
+---
+#feedback definition
+uint16 seconds
+uint32 millimeters
+float32 battery_charge

@@ -21,12 +21,14 @@ class basic_cleanAction {
         basic_cleanAction(std::string name) :
         cleanserv_(nh_, name, boost::bind(&basic_cleanAction::executeCB, this, _1), false), action_name_(name) {
             cleanserv_.start();
+            ROS_INFO("Clean server started.");
         }
 
         ~basic_cleanAction(void) {
         }
 
         void executeCB(const roomba_clean_actions::basic_cleanGoalConstPtr &goal) {
+            ROS_INFO("Got goal of %d seconds", goal->seconds);
             ros::Rate r(1);
             roomba_serial::SendButton dock;
             dock.buttoncode = 10;
@@ -45,8 +47,13 @@ class basic_cleanAction {
             while(!running) {
                 mode_pub.publish(mode);
                 button_pub.publish(button);
-                while(!client.call(sensorServer)) {}
-                running = (sensorServer.response.current < -100);
+                while(!client.call(sensorServer)) {r.sleep();}
+                running = (sensorServer.response.current < -150);
+                r.sleep();
+                r.sleep();
+                r.sleep();
+                r.sleep();
+                r.sleep();
             }
             while(curr < base + goal->seconds) {
                 if(cleanserv_.isPreemptRequested() || !ros::ok()) {
@@ -61,7 +68,9 @@ class basic_cleanAction {
                     distance = distance + sensorServer.response.distance;
                     charge = (float) (sensorServer.response.charge / sensorServer.response.capacity);
                 }
-                ROS_INFO("%s: Didn't get sensor response, sending stale data.", action_name_.c_str());
+                else {
+                    ROS_INFO("%s: Didn't get sensor response, sending stale data.", action_name_.c_str());
+                }
                 feedback_.seconds = (uint16_t) (curr - base);
                 feedback_.millimeters = distance;
                 feedback_.battery_charge = charge;
@@ -71,12 +80,13 @@ class basic_cleanAction {
             button_pub.publish(dock);
             bool charging = false;
             while(!charging) {
-                while(!client.call(sensorServer)) {}
+                while(!client.call(sensorServer)) {r.sleep();}
                 charging = (sensorServer.response.chargestate == 2);
                 feedback_.millimeters = distance + sensorServer.response.distance;
                 feedback_.battery_charge = (float) (sensorServer.response.charge / sensorServer.response.capacity);
                 feedback_.seconds = time(NULL) - base;
                 cleanserv_.publishFeedback(feedback_);
+                r.sleep();
             }
             result_.seconds = feedback_.seconds;
             result_.millimeters = feedback_.millimeters;

@@ -133,6 +133,7 @@ include_directories(
 
 ## Declare a C++ executable
  add_executable(roomba_clean_server src/basic_clean_server.cpp)
+ add_executable(roomba_clean_client src/basic_clean_client.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -140,6 +141,10 @@ include_directories(
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(roomba_clean_server
+   ${catkin_LIBRARIES}
+ )
+
+ target_link_libraries(roomba_clean_client
    ${catkin_LIBRARIES}
  )
 
@@ -158,25 +163,25 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS roomba_clean_actions roomba_clean_actions_node
+# install(TARGETS roomba_clean_actions
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+# Mark cpp header files for installation
+ install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+   FILES_MATCHING PATTERN "*.h"
+   PATTERN ".svn" EXCLUDE
+ )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+ install(FILES
+   launch/cleanserver.launch
+   # myfile2
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+ )
 
 #############
 ## Testing ##

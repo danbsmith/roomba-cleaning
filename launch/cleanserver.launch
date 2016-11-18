@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="roomba_serial" name="roomba_controller" type="roomba.py"/>
+    <node pkg="roomba_clean_actions" name="basic_clean" type="roomba_clean_server"/>
+</launch>

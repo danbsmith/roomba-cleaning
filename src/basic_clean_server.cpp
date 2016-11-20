@@ -58,7 +58,7 @@ class basic_cleanAction {
             while(curr < base + goal->seconds) {
                 if(cleanserv_.isPreemptRequested() || !ros::ok()) {
                     mode_pub.publish(dock);
-                    ROS_INFO("%s: Preempted", action_name_.c_str());
+                    ROS_INFO("%s: Preempted, now docking", action_name_.c_str());
                     cleanserv_.setPreempted();
                     success = false;
                     break;

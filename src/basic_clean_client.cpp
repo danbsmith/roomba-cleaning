@@ -3,9 +3,10 @@
 #include <actionlib/client/terminal_state.h>
 #include <roomba_clean_actions/basic_cleanAction.h>
 
-void doneCb(const actionlib::SimpleClientGoalState& state, const roomba_clean_actions::basic_cleanResultConstPtr& result) { 
+void doneCb(const actionlib::SimpleClientGoalState& state, const roomba_clean_actions::basic_cleanResultConstPtr& result) {
     ROS_INFO("Finished clean in state %s", state.toString().c_str());
     ROS_INFO("    Duration: %d, distance travelled: %d.  %f%% charge remaining.", result->seconds, result->millimeters, result->battery_charge);
+    ros::shutdown();
 }
 
 void activeCb() {

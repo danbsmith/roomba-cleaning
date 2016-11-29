@@ -28,7 +28,7 @@ class basic_cleanAction {
         }
 
         void executeCB(const roomba_clean_actions::basic_cleanGoalConstPtr &goal) {
-            ROS_INFO("Got goal of %d seconds", goal->seconds);
+            ROS_DEBUG("Got goal of %d seconds", goal->seconds);
             ros::Rate r(1);
             roomba_serial::SendButton dock;
             dock.buttoncode = 10;

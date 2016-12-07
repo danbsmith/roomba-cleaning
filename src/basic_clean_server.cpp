@@ -82,7 +82,7 @@ public:
     bool charging = false;
     while(!charging) {
       while(!client.call(sensorServer)) {r.sleep();}
-      charging = (sensorServer.response.chargestate == 2);
+      charging = (sensorServer.response.current > 0);
       feedback_.millimeters = distance + sensorServer.response.distance;
       feedback_.battery_charge = (float) (sensorServer.response.charge / sensorServer.response.capacity);
       feedback_.seconds = time(NULL) - base;

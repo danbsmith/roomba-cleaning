@@ -4,10 +4,11 @@
 #include <roomba_clean_actions/basic_cleanAction.h>
 #include <signal.h>
 
-actionlib::SimpleActionClient<roomba_clean_actions::basic_cleanAction> ac("basic_clean", true);
+actionlib::SimpleActionClient<roomba_clean_actions::basic_cleanAction>* client = 0;
 
 void interruptSignalHandler(int sig) {
-  ac.cancelGoal();
+  if(!client) {return;}
+  client->cancelGoal();
   ros::shutdown();
 }
 
@@ -27,9 +28,11 @@ void feedbackCb(const roomba_clean_actions::basic_cleanFeedbackConstPtr& feedbac
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "run_clean", ros::init_options::NoSigintHandler);
-  ROS_INFO("Waiting for server...");
+  actionlib::SimpleActionClient<roomba_clean_actions::basic_cleanAction> ac("basic_clean", true);
+  client = &ac;
   signal(SIGINT, interruptSignalHandler);
   ac.waitForServer();
+  ROS_INFO("Waiting for server...");
   roomba_clean_actions::basic_cleanGoal goal;
   goal.seconds = 1800;
   ac.sendGoal(goal, &doneCb, &activeCb, &feedbackCb);

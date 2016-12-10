@@ -28,7 +28,7 @@ public:
   }
 
   void executeCB(const roomba_clean_actions::basic_cleanGoalConstPtr &goal) {
-    ROS_DEBUG("Got goal of %d seconds", goal->seconds);
+    ROS_INFO("Got goal of %d seconds", goal->seconds);
     ros::Rate r(1);
     roomba_serial::SendButton dock;
     dock.buttoncode = 10;
@@ -49,7 +49,7 @@ public:
       button_pub.publish(button);
       while(!client.call(sensorServer)) {r.sleep();}
       running = (sensorServer.response.current < -150);
-      ROS_DEBUG("Current out of battery is %d mA", sensorServer.response.current);
+      ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
       r.sleep();
       r.sleep();
       r.sleep();

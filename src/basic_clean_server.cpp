@@ -45,11 +45,18 @@ public:
     button.buttoncode = 3; // Max length cycle
     bool running = false;
     while(!running) {
+      if(cleanserv_.isPreemptRequested() || !ros::ok()) {
+        mode_pub.publish(dock);
+        ROS_INFO("%s: Preempted, now docking", action_name_.c_str());
+        cleanserv_.setPreempted();
+        success = false;
+        break;
+      }
       mode_pub.publish(mode);
       button_pub.publish(button);
       while(!client.call(sensorServer)) {r.sleep();}
       running = (sensorServer.response.current < -150);
-      ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
+      //ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
       r.sleep();
       r.sleep();
       r.sleep();

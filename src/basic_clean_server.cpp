@@ -56,7 +56,7 @@ public:
       button_pub.publish(button);
       while(!client.call(sensorServer)) {r.sleep();}
       running = (sensorServer.response.current < -150);
-      //ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
+      ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
       r.sleep();
       r.sleep();
       r.sleep();

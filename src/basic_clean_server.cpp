@@ -42,7 +42,7 @@ public:
     roomba_serial::SetMode mode;
     roomba_serial::SendButton button;
     mode.modecode = 2; // Safe mode, to start cleaning cycle
-    button.buttoncode = 3; // Max length cycle
+    button.buttoncode = 2; // Max length cycle
     bool running = false;
     while(!running) {
       if(cleanserv_.isPreemptRequested() || !ros::ok()) {
@@ -53,10 +53,16 @@ public:
         break;
       }
       mode_pub.publish(mode);
+      r.sleep();
       button_pub.publish(button);
       while(!client.call(sensorServer)) {r.sleep();}
       running = (sensorServer.response.current < -150);
       ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
+      r.sleep();
+      r.sleep();
+      r.sleep();
+      r.sleep();
+      r.sleep();
       r.sleep();
       r.sleep();
       r.sleep();

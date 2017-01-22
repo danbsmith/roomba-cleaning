@@ -58,16 +58,9 @@ public:
       while(!client.call(sensorServer)) {r.sleep();}
       running = (sensorServer.response.current < -150);
       ROS_INFO("Current out of battery is %d mA", sensorServer.response.current);
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
-      r.sleep();
+      for(int i = 0; i < 10; i++) {
+        r.sleep();
+      }
     }
     while(curr < base + goal->seconds) {
       if(cleanserv_.isPreemptRequested() || !ros::ok()) {

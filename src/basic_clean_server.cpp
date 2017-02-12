@@ -57,12 +57,13 @@ public:
       button_pub.publish(button);
       r.sleep();
       client.call(sensorServer);
-      running = (sensorServer.response.current < -150);
       ROS_INFO("Current into battery is %d mA", sensorServer.response.current);
-      for(int i = 0; i < 10; i++) {
+      for(int i = 0; i < 5; i++) {
         r.sleep();
       }
+      running = (sensorServer.response.current < -150);
     }
+    ROS_INFO("Roomba Away!");
     while(curr < base + goal->seconds) {
       if(cleanserv_.isPreemptRequested() || !ros::ok()) {
         button_pub.publish(dock);

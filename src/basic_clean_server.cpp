@@ -29,7 +29,7 @@ public:
 
   void executeCB(const roomba_clean_actions::basic_cleanGoalConstPtr &goal) {
     ROS_INFO("Got goal of %d seconds", goal->seconds);
-    ros::Rate r(1);
+    ros::Rate r(0.5);
     roomba_serial::SendButton dock;
     dock.buttoncode = 10;
     roomba_serial::Sensors sensorServer;

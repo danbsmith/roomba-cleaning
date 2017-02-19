@@ -61,7 +61,7 @@ public:
       for(int i = 0; i < 5; i++) {
         r.sleep();
       }
-      running = (sensorServer.response.current < -150);
+      running = (sensorServer.response.current < -100);
     }
     ROS_INFO("Roomba Away!");
     while(curr < base + goal->seconds) {

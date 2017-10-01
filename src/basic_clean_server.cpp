@@ -44,9 +44,9 @@ public:
     mode.modecode = 2; // Safe mode, to start cleaning cycle
     button.buttoncode = 3;
     bool running = false;
+    mode_pub.publish(mode);
+    r.sleep();
     while(!running) {
-      mode_pub.publish(mode);
-      r.sleep();
       if(cleanserv_.isPreemptRequested() || !ros::ok()) {
         button_pub.publish(dock);
         ROS_INFO("%s: Preempted, now docking", action_name_.c_str());
@@ -55,11 +55,12 @@ public:
         break;
       }
       button_pub.publish(button);
+      r.sleep();
+      client.call(sensorServer);
+      ROS_INFO("Current into battery is %d mA", sensorServer.response.current);
       for(int i = 0; i < 5; i++) {
         r.sleep();
       }
-      client.call(sensorServer);
-      ROS_INFO("Current into battery is %d mA", sensorServer.response.current);
       running = (sensorServer.response.current < -100);
     }
     ROS_INFO("Roomba Away!");

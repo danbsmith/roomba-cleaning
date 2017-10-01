@@ -42,7 +42,7 @@ public:
     roomba_serial::SetMode mode;
     roomba_serial::SendButton button;
     mode.modecode = 2; // Safe mode, to start cleaning cycle
-    button.buttoncode = 3;
+    button.buttoncode = 2;
     bool running = false;
     mode_pub.publish(mode);
     r.sleep();
@@ -86,8 +86,6 @@ public:
       cleanserv_.publishFeedback(feedback_);
       r.sleep();
     }
-    mode_pub.publish(mode);
-    r.sleep();
     button_pub.publish(dock);
     bool charging = false;
     while(!charging) {
